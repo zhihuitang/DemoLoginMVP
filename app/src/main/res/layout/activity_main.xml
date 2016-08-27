@@ -29,6 +29,8 @@
     </LinearLayout>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:layout_marginTop="3dp" android:text="correct user: mvp, mvp"/>
+    <TextView android:id="@+id/tv_location" android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_marginTop="3dp" android:text="last known location"/>
 
     <ProgressBar android:id="@+id/progress_login" android:layout_width="match_parent"
                  android:layout_height="wrap_content" android:layout_marginTop="40dp"/>
