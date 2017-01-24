@@ -1,10 +1,14 @@
 package com.example.zhihuitang.demologinmvp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import android.location.Location;
 import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -39,6 +43,10 @@ public class MainActivity extends AppCompatActivity implements ILoginView, View.
     EditText editPass;
     @BindView(R.id.btn_login_login)
     Button btnLogin;
+
+    @BindView(R.id.btn_login_location_service)
+    Button btnLocationService;
+
     @BindView(R.id.btn_login_clear)
     Button btnClear;
     @BindView(R.id.tv_location)
@@ -71,9 +79,10 @@ public class MainActivity extends AppCompatActivity implements ILoginView, View.
 
         btnClear.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
+        btnLocationService.setOnClickListener(this);
 
         loginPresenter = new LoginPresenterCompl(this);
-        loginPresenter.setProgressBarVisiblity(View.INVISIBLE);
+        loginPresenter.setProgressBarVisibility(View.INVISIBLE);
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -90,12 +99,16 @@ public class MainActivity extends AppCompatActivity implements ILoginView, View.
         switch (view.getId()) {
             case R.id.btn_login_clear:
                 loginPresenter.clear();
+
                 break;
             case R.id.btn_login_login:
-                loginPresenter.setProgressBarVisiblity(View.VISIBLE);
+                loginPresenter.setProgressBarVisibility(View.VISIBLE);
                 btnLogin.setEnabled(false);
                 btnClear.setEnabled(false);
                 loginPresenter.doLogin(editUser.getText().toString(), editPass.getText().toString());
+                break;
+            case R.id.btn_login_location_service:
+                loginPresenter.checkLocationService(this);
                 break;
             default:
                 break;
@@ -123,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements ILoginView, View.
 
     @Override
     public void onLoginResult(Boolean result, int code) {
-        loginPresenter.setProgressBarVisiblity(View.INVISIBLE);
+        loginPresenter.setProgressBarVisibility(View.INVISIBLE);
         btnLogin.setEnabled(true);
         btnClear.setEnabled(true);
         if (result) {
@@ -138,13 +151,39 @@ public class MainActivity extends AppCompatActivity implements ILoginView, View.
     }
 
     @Override
-    public void onLocation(double latitude, double longtitude) {
-        tvLocation.setText(String.format("Current location: (%f, %f)", latitude, longtitude));
+    public void onLocation(double latitude, double longitude) {
+        tvLocation.setText(String.format("Current location: (%f, %f)", latitude, longitude));
     }
 
     @Override
     public LocationManager getLocationManager() {
         return (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    @Override
+    public void showLocationService() {
+        // notify user
+        final Context context = this;
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setMessage(context.getResources().getString(R.string.gps_network_not_enabled));
+        dialog.setPositiveButton(context.getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                // TODO Auto-generated method stub
+                Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                context.startActivity(myIntent);
+                //get gps
+            }
+        });
+        dialog.setNegativeButton(context.getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        dialog.show();
     }
 
     @Override

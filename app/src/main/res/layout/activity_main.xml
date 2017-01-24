@@ -27,6 +27,9 @@
                 android:layout_weight="1"
                 android:text="Clear"/>
     </LinearLayout>
+    <Button android:id="@+id/btn_login_location_service" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginLeft="4dp"
+            android:text="Location Service"/>
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:layout_marginTop="3dp" android:text="correct user: mvp, mvp"/>
     <TextView android:id="@+id/tv_location" android:layout_width="wrap_content" android:layout_height="wrap_content"

@@ -6,9 +6,15 @@ import android.location.LocationManager;
  * Created by zhihuitang on 26/08/16.
  */
 public interface ILoginView {
-    public void onClearText();
-    public void onLoginResult(Boolean result, int code);
-    public void onSetProgressBarVisibility(int visibility);
-    public void onLocation(double latitude, double longtitude);
-    public LocationManager getLocationManager();
+    void onClearText();
+
+    void onLoginResult(Boolean result, int code);
+
+    void onSetProgressBarVisibility(int visibility);
+
+    void onLocation(double latitude, double longitude);
+
+    LocationManager getLocationManager();
+
+    void showLocationService();
 }
